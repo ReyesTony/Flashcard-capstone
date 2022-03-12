@@ -11,7 +11,7 @@ export default function DeckList({ decks, setDecks }) {
     listDecks(abortController.signal).then(setDecks).catch(setError);
 
     return () => abortController.abort();
-  }, []);
+  }, [setDecks]);
 
   if (error) {
     console.log(error);

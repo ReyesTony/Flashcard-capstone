@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import DeckView from "./DeckView";
-import {Route, Switch, useRouteMatch } from "react-router-dom";
+import { Route, Switch, useRouteMatch } from "react-router-dom";
 import BreadCrumb from "../BreadCrumb";
 import { readDeck } from "../../utils/api";
 import CardList from "../Card/CardList";
@@ -13,7 +13,10 @@ export default function ViewDeck({ decks, setDecks }) {
   const [deck, setDeck] = useState({});
   const { path, url, params } = useRouteMatch();
   const [error, setError] = useState(undefined);
- 
+  if (error) {
+    console.log(error);
+  }
+
   let deckId;
   for (let param in params) {
     if (param === "deckId") {
@@ -25,7 +28,7 @@ export default function ViewDeck({ decks, setDecks }) {
     readDeck(deckId, abortController.signal).then(setDeck).catch(setError);
 
     return () => abortController.abort();
-  }, []);
+  }, [deckId]);
 
   return (
     <div>

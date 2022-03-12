@@ -4,7 +4,7 @@ import BreadCrumb from "../BreadCrumb";
 import StudyCard from "../Card/StudyCard";
 
 export default function StudyDeck({ decks, deck }) {
-  let cardAmount = 0;
+  const [cardAmount, setcardAmount] = useState();
   let tempCards = [];
   if (deck.cards !== undefined) {
     tempCards = deck.cards;
@@ -12,22 +12,18 @@ export default function StudyDeck({ decks, deck }) {
 
   const [cards, setCards] = useState([...tempCards]);
   const deckId = deck.id;
-  if (deck.cards != undefined) {
-    cardAmount = deck.cards.length;
-  } else {
-    cardAmount = 0;
-  }
+
   useEffect(() => {
     const abortController = new AbortController();
     readDeck(deckId, abortController.signal)
-      .then((result => setCards(result.cards)))
+      .then((result) => setCards(result.cards))
       .then(() => {
-        cardAmount = cards.length;
+        setcardAmount(cards.length);
       })
       .catch(console.error);
 
     return () => abortController.abort();
-  }, [deck, decks]);
+  }, [deck, decks, cards.length, deckId]);
   return (
     <div>
       <BreadCrumb decks={decks} />
@@ -39,8 +35,8 @@ export default function StudyDeck({ decks, deck }) {
         <div>
           <h3>Not Enough Cards.</h3>
           <p>
-            You need at least 3 cards to study. There are only {cardAmount} cards in
-            this deck.
+            You need at least 3 cards to study. There are only {cardAmount}{" "}
+            cards in this deck.
           </p>
         </div>
       )}

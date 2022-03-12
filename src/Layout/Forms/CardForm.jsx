@@ -7,17 +7,22 @@ export default function CardForm({ decks, setDecks, deck, setDeck, deckUrl }) {
   const deckTemp = deck;
   const [formData, setFormData] = useState({ front: "", back: "" });
   const history = useHistory();
-  const { url} = useRouteMatch();
+  const { url } = useRouteMatch();
   const subUrls = url.split(`/`);
+  const firstCheck = subUrls[subUrls.length - 1];
+  const secondCheck = subUrls[subUrls.length - 2];
+
   const [edit, setEdit] = useState(false);
   useEffect(() => {
-    if (subUrls[subUrls.length - 1] === "edit") {
+    const abortController = new AbortController();
+    if (firstCheck === "edit") {
       setEdit(true);
-      readCard(subUrls[subUrls.length - 2])
+      readCard(secondCheck)
         .then(setFormData)
-        .catch(console.log("Bad magnitude 10"));
+        .catch((err) => console.log(err));
     }
-  }, []);
+    return () => abortController.abort();
+  }, [firstCheck, secondCheck]);
 
   function handleChange({ target }) {
     setFormData(() => ({
@@ -34,7 +39,7 @@ export default function CardForm({ decks, setDecks, deck, setDeck, deckUrl }) {
       theArguments = [formData, abortController.signal];
       handleFunction = updateCard;
     }
-    handleFunction(...theArguments) 
+    handleFunction(...theArguments)
       .then(setFormData)
       .then(() => {
         deckTemp.cards = deckTemp.cards.filter(

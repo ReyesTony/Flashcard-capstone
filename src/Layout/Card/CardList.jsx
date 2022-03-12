@@ -11,7 +11,7 @@ export default function CardList({ deck, deckId, setDeck, decks, setDecks }) {
       .catch(console.error);
 
     return () => abortController.abort();
-  }, [deck]);
+  }, [deck, deckId]);
   const list = cards.map((card, index) => (
     <CardView
       card={card}

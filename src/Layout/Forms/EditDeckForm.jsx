@@ -10,7 +10,6 @@ export default function EditDeckForm({ deck, setDeck, deckUrl, setDecks }) {
   const history = useHistory();
   const handleDescriptionChange = (event) => setDescription(event.target.value);
   const abortController = new AbortController();
-
   const [tempDeck, setTempDeck] = useState({
     name: name,
     description: description,
@@ -22,10 +21,10 @@ export default function EditDeckForm({ deck, setDeck, deckUrl, setDecks }) {
   }, [deck]);
   useEffect(() => {
     setTempDeck({ name: name, description: description, id: params.deckId });
-  }, [name, description]);
+  }, [name, description, params.deckId]);
   function submitHandler(event) {
     event.preventDefault();
-    console.log(tempDeck);
+
     updateDeck(tempDeck, abortController.signal)
       .then(setDeck({ ...deck, ...tempDeck }))
       .then(listDecks(abortController.signal).then(setDecks))
@@ -43,7 +42,7 @@ export default function EditDeckForm({ deck, setDeck, deckUrl, setDecks }) {
           type="text"
           name="name"
           onChange={handleNameChange}
-          value={name}
+          value={name ?? ""}
           className="form-control"
         />
       </div>
@@ -53,7 +52,7 @@ export default function EditDeckForm({ deck, setDeck, deckUrl, setDecks }) {
           id="description"
           type="text"
           name="description"
-          value={description}
+          value={description ?? ""}
           className="form-control"
           onChange={handleDescriptionChange}
         ></textarea>

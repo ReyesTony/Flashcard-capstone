@@ -29,7 +29,11 @@ export default function BreadCrumb({ decks }) {
       if (index >= subUrls.length - 1) {
         className = "breadcrumb-item active";
         if (aSubUrl === deckId && deckId !== "new") {
-          return <li className={className}>{deck.name}</li>;
+          return (
+            <li key={index} className={className}>
+              {deck.name}
+            </li>
+          );
         }
         let value = "  ";
         switch (aSubUrl) {
@@ -52,15 +56,21 @@ export default function BreadCrumb({ decks }) {
             }
 
             break;
+          default:
+            console.log("??");
         }
-        return <li className={className}>{value}</li>;
+        return (
+          <li key={index} className={className}>
+            {value}
+          </li>
+        );
       } else {
         className = "breadcrumb-item";
       }
       if (aSubUrl !== "decks" && aSubUrl !== "") {
         if (aSubUrl === deckId) {
           return (
-            <li className={className}>
+            <li key={index} className={className}>
               <Link to={`/decks/${aSubUrl}`}>{deck.name}</Link>
             </li>
           );
@@ -68,7 +78,7 @@ export default function BreadCrumb({ decks }) {
       } else {
         if (aSubUrl === "") {
           return (
-            <li className={className}>
+            <li key={index} className={className}>
               <Link to={`${aSubUrl}`} className="oi oi-home">
                 Home
               </Link>
@@ -76,9 +86,8 @@ export default function BreadCrumb({ decks }) {
           );
         }
       }
-    } else {
-      return null;
     }
+    return null;
   });
   return (
     <nav aria-label="breadcrumb">
