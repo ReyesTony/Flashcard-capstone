@@ -4,7 +4,8 @@ import { readDeck } from "../utils/api";
 
 export default function BreadCrumb({ decks }) {
   const [deck, setDeck] = useState({});
-  const { url, params } = useRouteMatch();
+  const { url } = useRouteMatch();
+  const params = useRouteMatch();
   const [error, setError] = useState(undefined);
   const subUrls = url.split(`/`);
 
@@ -14,15 +15,16 @@ export default function BreadCrumb({ decks }) {
       deckId = params[param];
     }
   }
-
   if (error) {
     console.log(error);
   }
   useEffect(() => {
     const abortController = new AbortController();
-    readDeck(deckId, abortController.signal).then(setDeck).catch(setError);
+    if (deckId) {
+      readDeck(deckId, abortController.signal).then(setDeck).catch(setError);
+    }
     return () => abortController.abort();
-  }, [decks, deckId]);
+  }, [deckId]);
   const list = subUrls.map((aSubUrl, index) => {
     if (deck !== undefined) {
       let className;

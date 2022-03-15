@@ -16,7 +16,6 @@ export default function ViewDeck({ decks, setDecks }) {
   if (error) {
     console.log(error);
   }
-
   let deckId;
   for (let param in params) {
     if (param === "deckId") {

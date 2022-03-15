@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import { readDeck } from "../../utils/api/index";
 import CardView from "./CardView";
 
-export default function CardList({ deck, deckId, setDeck, decks, setDecks }) {
+export default function CardList({ deck, deckId, setDeck }) {
   const [cards, setCards] = useState([]);
-  useEffect(() => {
-    const abortController = new AbortController();
-    readDeck(deckId, abortController.signal)
-      .then((result) => setCards(result.cards))
-      .catch(console.error);
+  const deckID = useParams().deckId;
 
+  useEffect(() => {
+    setCards([])
+    const abortController = new AbortController();
+    if (deckID) {
+      readDeck(deckID, abortController.signal)
+        .then((result) => setCards(result.cards))
+        .catch(console.error);
+    }
     return () => abortController.abort();
-  }, [deck, deckId]);
+  }, [deckID]);
   const list = cards.map((card, index) => (
     <CardView
       card={card}

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import { readDeck } from "../../utils/api";
 import BreadCrumb from "../BreadCrumb";
 import StudyCard from "../Card/StudyCard";
@@ -9,9 +10,8 @@ export default function StudyDeck({ decks, deck }) {
   if (deck.cards !== undefined) {
     tempCards = deck.cards;
   }
-
+  const deckId = useParams().deckId;
   const [cards, setCards] = useState([...tempCards]);
-  const deckId = deck.id;
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -23,7 +23,7 @@ export default function StudyDeck({ decks, deck }) {
       .catch(console.error);
 
     return () => abortController.abort();
-  }, [deck, decks, cards.length, deckId]);
+  }, [cards.length, deckId]);
   return (
     <div>
       <BreadCrumb decks={decks} />
